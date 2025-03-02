@@ -177,8 +177,6 @@ h1 {
 
 .team-member img {
     width: 150px; /* Adjust size as needed */
-   /* height: 150px;
-   /* border-radius: 50%; /* Makes images circular */*/
     object-fit: cover;
     transition: transform 0.3s ease-in-out;
 }
