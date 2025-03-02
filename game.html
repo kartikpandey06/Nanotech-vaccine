@@ -1,223 +1,174 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Game</title>
     <link rel="stylesheet" href="style.css">
-Copy<!-- Include React, ReactDOM, and Babel from CDN (using version 17 for compatibility) -->
-<script src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
-<script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
-<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
-<!-- Custom styles instead of Tailwind -->
-<style>
-    /* Game-specific styles */
-    .game-area {
-        touch-action: none;
+    <style>
+        /* Basic game styles - no external dependencies */
+        #game-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+Copy    #game-area {
         position: relative;
         width: 100%;
+        height: 400px;
         background-color: #f0f0f0;
         border: 2px solid #ccc;
         border-radius: 8px;
         overflow: hidden;
-        height: 400px;
-        max-width: 600px;
-        margin: 0 auto;
+        touch-action: none;
     }
     
-    .flex {
-        display: flex;
-    }
-    
-    .justify-center {
-        justify-content: center;
-    }
-    
-    .gap-4 {
-        gap: 1rem;
-    }
-    
-    .text-center {
+    .score-display {
         text-align: center;
-    }
-    
-    .mb-4 {
         margin-bottom: 1rem;
     }
     
-    .mb-2 {
-        margin-bottom: 0.5rem;
+    .score-row {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
     }
     
-    .mt-4 {
-        margin-top: 1rem;
-    }
-    
-    .mt-2 {
-        margin-top: 0.5rem;
-    }
-    
-    .mt-1 {
-        margin-top: 0.25rem;
-    }
-    
-    .p-2 {
-        padding: 0.5rem;
-    }
-    
-    .text-base {
-        font-size: 1rem;
-    }
-    
-    .text-lg {
-        font-size: 1.125rem;
-    }
-    
-    .text-xs {
-        font-size: 0.75rem;
-    }
-    
-    .font-bold {
+    .killed-counter {
+        color: #d00;
         font-weight: bold;
     }
     
-    .font-semibold {
-        font-weight: 600;
+    .speed-indicator {
+        font-size: 0.8em;
+        margin-top: 0.25rem;
     }
     
-    .rounded-lg {
-        border-radius: 0.5rem;
-    }
-    
-    .rounded-full {
-        border-radius: 9999px;
-    }
-    
-    .rounded {
-        border-radius: 0.25rem;
-    }
-    
-    .absolute {
+    .virus {
         position: absolute;
+        width: 40px;
+        height: 40px;
+        margin-left: -20px;
+        margin-top: -20px;
+        z-index: 5;
     }
     
-    .relative {
+    .virus-body {
+        width: 30px;
+        height: 30px;
+        background-color: #10b981;
+        border-radius: 50%;
         position: relative;
+        margin: 5px;
     }
     
-    .mx-auto {
+    .virus-spike {
+        position: absolute;
+        width: 8px;
+        height: 15px;
+        background-color: #10b981;
+        border-radius: 4px;
+        top: 50%;
+        left: 50%;
+        margin-left: -4px;
+        margin-top: -22px;
+        transform-origin: center 15px;
+    }
+    
+    .sperm {
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        margin-left: -20px;
+        margin-top: -20px;
+        z-index: 10;
+    }
+    
+    .sperm-head {
+        width: 24px;
+        height: 24px;
+        background-color: #60a5fa;
+        border-radius: 50%;
+        position: absolute;
+        top: 8px;
+        left: 8px;
+    }
+    
+    .sperm-tail {
+        width: 8px;
+        height: 30px;
+        background-color: #60a5fa;
+        border-radius: 4px;
+        position: absolute;
+        top: 10px;
+        left: 18px;
+        transform: rotate(30deg);
+    }
+    
+    .instruction {
+        position: absolute;
+        top: 8px;
+        left: 8px;
+        font-size: 0.8em;
+        color: #4b5563;
+        background-color: rgba(255, 255, 255, 0.7);
+        padding: 4px 8px;
+        border-radius: 4px;
+        z-index: 20;
+    }
+    
+    .virus-counter {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        font-size: 0.8em;
+        font-weight: bold;
+        color: #047857;
+        background-color: rgba(255, 255, 255, 0.7);
+        padding: 4px 8px;
+        border-radius: 4px;
+        z-index: 20;
+    }
+    
+    .game-over {
+        display: none;
+        text-align: center;
+        margin-top: 1rem;
+    }
+    
+    .game-over-text {
+        font-size: 1.2em;
+        font-weight: bold;
+        color: #d00;
+    }
+    
+    .play-again {
+        margin-top: 0.5rem;
+        padding: 8px 16px;
+        background-color: #3b82f6;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+    
+    .play-again:hover {
+        background-color: #2563eb;
+    }
+    
+    .mobile-notice {
+        text-align: center;
+        font-size: 0.8em;
+        color: #4b5563;
+        margin-top: 1rem;
+        max-width: 320px;
         margin-left: auto;
         margin-right: auto;
     }
     
-    .max-w-xs {
-        max-width: 20rem;
-    }
-    
-    .bg-blue-400 {
-        background-color: #60a5fa;
-    }
-    
-    .bg-green-500 {
-        background-color: #10b981;
-    }
-    
-    .bg-blue-500 {
-        background-color: #3b82f6;
-    }
-    
-    .text-white {
-        color: white;
-    }
-    
-    .text-green-700 {
-        color: #047857;
-    }
-    
-    .text-gray-600 {
-        color: #4b5563;
-    }
-    
-    .bg-white {
-        background-color: white;
-    }
-    
-    .bg-opacity-70 {
-        --bg-opacity: 0.7;
-        background-color: rgba(255, 255, 255, var(--bg-opacity));
-    }
-    
-    .top-2 {
-        top: 0.5rem;
-    }
-    
-    .left-2 {
-        left: 0.5rem;
-    }
-    
-    .right-2 {
-        right: 0.5rem;
-    }
-    
-    .px-4 {
-        padding-left: 1rem;
-        padding-right: 1rem;
-    }
-    
-    .py-2 {
-        padding-top: 0.5rem;
-        padding-bottom: 0.5rem;
-    }
-    
-    button.bg-blue-500:hover {
-        background-color: #2563eb;
-    }
-    
-    .w-6 {
-        width: 1.5rem;
-    }
-    
-    .h-6 {
-        height: 1.5rem;
-    }
-    
-    .w-2 {
-        width: 0.5rem;
-    }
-    
-    .h-8 {
-        height: 2rem;
-    }
-    
-    .w-8 {
-        width: 2rem;
-    }
-    
-    .h-8 {
-        height: 2rem;
-    }
-    
-    .h-4 {
-        height: 1rem;
-    }
-    
     @media (max-width: 600px) {
-        .game-area {
+        #game-area {
             height: 60vh;
-        }
-    }
-    
-    @media (min-width: 768px) {
-        .md\:text-sm {
-            font-size: 0.875rem;
-        }
-        
-        .md\:text-lg {
-            font-size: 1.125rem;
-        }
-        
-        .md\:text-xl {
-            font-size: 1.25rem;
         }
     }
 </style>
@@ -238,7 +189,40 @@ Copy<!-- Include React, ReactDOM, and Babel from CDN (using version 17 for compa
 Copy<main>
     <section>
         <h2>Play Our Virus Game</h2>
-        <div id="game-container"></div>
+        <div id="game-container">
+            <div class="score-display">
+                <div class="score-row">
+                    <div>Score: <span id="score">0</span></div>
+                    <div class="killed-counter">Viruses Killed: <span id="viruses-killed">0</span></div>
+                </div>
+                <div class="speed-indicator">Speed Level: <span id="speed-level">1</span></div>
+            </div>
+            
+            <div id="game-area">
+                <div id="sperm" class="sperm">
+                    <div class="sperm-head"></div>
+                    <div class="sperm-tail"></div>
+                </div>
+                
+                <div class="instruction">
+                    Move your cursor to control the blue sperm. Try to catch all the viruses!
+                </div>
+                
+                <div class="virus-counter">
+                    Active Viruses: <span id="active-viruses">1</span>
+                </div>
+            </div>
+            
+            <div id="game-over" class="game-over">
+                <div class="game-over-text">Game Over!</div>
+                <div>You've killed all the viruses!</div>
+                <button id="play-again" class="play-again">Play Again</button>
+            </div>
+            
+            <div class="mobile-notice">
+                Tap and drag in the game area to catch viruses. Speed increases every 200 points!
+            </div>
+        </div>
     </section>
 </main>
 
@@ -246,192 +230,130 @@ Copy<main>
     <p>&copy; 2025 Nanotech Vaccine Research</p>
 </footer>
 
-<!-- Game Component Script -->
-<script type="text/babel">
-    const { useState, useEffect, useRef } = React;
-    
-    // Add viewport meta tag for proper mobile scaling
-    const addViewportMeta = () => {
-        if (typeof document !== 'undefined') {
-            // Check if viewport meta tag already exists
-            let meta = document.querySelector('meta[name="viewport"]');
-            if (!meta) {
-                meta = document.createElement('meta');
-                meta.name = 'viewport';
-                meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
-                document.getElementsByTagName('head')[0].appendChild(meta);
-            } else {
-                // Update existing viewport meta
-                meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
-            }
+<!-- Vanilla JavaScript implementation - no dependencies -->
+<script>
+    // Wait for DOM to be loaded
+    document.addEventListener('DOMContentLoaded', function() {
+        // Game elements
+        const gameArea = document.getElementById('game-area');
+        const spermElement = document.getElementById('sperm');
+        const scoreDisplay = document.getElementById('score');
+        const virusesKilledDisplay = document.getElementById('viruses-killed');
+        const speedLevelDisplay = document.getElementById('speed-level');
+        const activeVirusesDisplay = document.getElementById('active-viruses');
+        const gameOverDisplay = document.getElementById('game-over');
+        const playAgainButton = document.getElementById('play-again');
+        const instruction = document.querySelector('.instruction');
+        
+        // Game state
+        let gameActive = true;
+        let score = 0;
+        let virusesKilled = 0;
+        let baseSpeed = 0.5;
+        let lastTimestamp = 0;
+        let animationFrameId = null;
+        
+        // Detect mobile
+        const isMobile = window.matchMedia('(pointer: coarse)').matches;
+        if (isMobile) {
+            instruction.textContent = "Touch and drag to control the blue sperm. Catch the green viruses!";
         }
-    };
-
-    const CatchTheVirusGame = () => {
-        const gameAreaRef = useRef(null);
-        const requestRef = useRef(null);
-        const [isMobile, setIsMobile] = useState(false);
-        const [gameActive, setGameActive] = useState(true);
-        const [score, setScore] = useState(0);
-        const [virusesKilled, setVirusesKilled] = useState(0);
-        const [baseSpeed, setBaseSpeed] = useState(0.5);
         
-        // Use refs for positions to avoid state batching issues
-        const spermPosRef = useRef({ x: 100, y: 100 });
-        const virusesRef = useRef([{ 
-            id: 0,
+        // Sperm position
+        let spermPos = { x: 100, y: 100 };
+        
+        // Viruses array
+        let viruses = [{
+            id: Date.now(),
+            element: createVirusElement(Date.now()),
             pos: { x: 300, y: 300 },
-            direction: { dx: 1, dy: 1 } 
-        }]);
+            direction: { dx: 1, dy: 1 }
+        }];
         
-        // For rendering UI (not used for game logic)
-        const [spermPos, setSpermPos] = useState({ x: 100, y: 100 });
-        const [viruses, setViruses] = useState([{
-            id: 0,
-            pos: { x: 300, y: 300 }
-        }]);
-        
-        // Set up game and detect device type
-        useEffect(() => {
-            setIsMobile(window.matchMedia('(pointer: coarse)').matches);
-            addViewportMeta();
+        // Initialize the game
+        function init() {
+            // Set initial positions
+            updateSpermPosition(spermPos.x, spermPos.y);
             
-            // Initialize with random virus position
-            if (gameAreaRef.current) {
-                const width = gameAreaRef.current.clientWidth;
-                const height = gameAreaRef.current.clientHeight;
-                
-                const initialVirus = {
-                    id: 0,
-                    pos: {
-                        x: Math.random() * (width - 40) + 20,
-                        y: Math.random() * (height - 40) + 20
-                    },
-                    direction: { dx: 1, dy: 1 }
-                };
-                
-                virusesRef.current = [initialVirus];
-                setViruses([{
-                    id: initialVirus.id,
-                    pos: initialVirus.pos
-                }]);
-            }
-            
-            return () => {
-                if (requestRef.current) {
-                    cancelAnimationFrame(requestRef.current);
-                }
-            };
-        }, []);
-        
-        // Set up input handlers
-        useEffect(() => {
-            const handleMouseMove = (e) => {
-                if (gameAreaRef.current && gameActive) {
-                    const rect = gameAreaRef.current.getBoundingClientRect();
-                    const newPos = {
-                        x: e.clientX - rect.left,
-                        y: e.clientY - rect.top
-                    };
-                    spermPosRef.current = newPos;
-                    setSpermPos(newPos);
-                }
-            };
-            
-            const handleTouchMove = (e) => {
-                if (gameAreaRef.current && gameActive && e.touches && e.touches[0]) {
-                    e.preventDefault(); // Prevent scrolling while playing
-                    const rect = gameAreaRef.current.getBoundingClientRect();
-                    const newPos = {
-                        x: e.touches[0].clientX - rect.left,
-                        y: e.touches[0].clientY - rect.top
-                    };
-                    spermPosRef.current = newPos;
-                    setSpermPos(newPos);
-                }
-            };
-
-            if (gameAreaRef.current) {
-                gameAreaRef.current.addEventListener('mousemove', handleMouseMove);
-                gameAreaRef.current.addEventListener('touchmove', handleTouchMove, { passive: false });
-                gameAreaRef.current.addEventListener('touchstart', handleTouchMove, { passive: false });
-            }
-
-            return () => {
-                if (gameAreaRef.current) {
-                    gameAreaRef.current.removeEventListener('mousemove', handleMouseMove);
-                    gameAreaRef.current.removeEventListener('touchmove', handleTouchMove);
-                    gameAreaRef.current.removeEventListener('touchstart', handleTouchMove);
-                }
-            };
-        }, [gameActive]);
-        
-        // Game loop using requestAnimationFrame
-        useEffect(() => {
-            let lastTime = 0;
-            
-            const gameLoop = (timestamp) => {
-                // Calculate time delta
-                if (!lastTime) lastTime = timestamp;
-                const deltaTime = timestamp - lastTime;
-                lastTime = timestamp;
-                
-                if (!gameActive) {
-                    return;
-                }
-                
-                // Move viruses
-                moveViruses(deltaTime);
-                
-                // Check collision
-                checkCollision();
-                
-                // Update score
-                setScore(prev => {
-                    const newScore = prev + 1;
-                    
-                    // Add new virus every 200 points
-                    if (Math.floor(newScore / 200) > Math.floor(prev / 200)) {
-                        addNewVirus();
-                        
-                        // Increase speed every 200 points (up to a limit)
-                        if (baseSpeed < 1.5) {
-                            setBaseSpeed(prevSpeed => prevSpeed + 0.1);
-                        }
-                    }
-                    
-                    return newScore;
-                });
-                
-                // Continue game loop
-                requestRef.current = requestAnimationFrame(gameLoop);
-            };
+            // Add event listeners
+            gameArea.addEventListener('mousemove', handleMouseMove);
+            gameArea.addEventListener('touchmove', handleTouchMove, { passive: false });
+            gameArea.addEventListener('touchstart', handleTouchMove, { passive: false });
+            playAgainButton.addEventListener('click', resetGame);
             
             // Start game loop
-            if (gameActive) {
-                requestRef.current = requestAnimationFrame(gameLoop);
+            startGameLoop();
+        }
+        
+        // Create virus element
+        function createVirusElement(id) {
+            const virus = document.createElement('div');
+            virus.className = 'virus';
+            virus.id = 'virus-' + id;
+            
+            const virusBody = document.createElement('div');
+            virusBody.className = 'virus-body';
+            virus.appendChild(virusBody);
+            
+            // Create 8 spikes around the virus
+            for (let i = 0; i < 8; i++) {
+                const spike = document.createElement('div');
+                spike.className = 'virus-spike';
+                spike.style.transform = `rotate(${i * 45}deg)`;
+                virusBody.appendChild(spike);
             }
             
-            return () => {
-                if (requestRef.current) {
-                    cancelAnimationFrame(requestRef.current);
-                }
-            };
-        }, [gameActive]);
+            gameArea.appendChild(virus);
+            return virus;
+        }
+        
+        // Handle mouse movement
+        function handleMouseMove(e) {
+            if (!gameActive) return;
+            
+            const rect = gameArea.getBoundingClientRect();
+            updateSpermPosition(
+                e.clientX - rect.left,
+                e.clientY - rect.top
+            );
+        }
+        
+        // Handle touch movement
+        function handleTouchMove(e) {
+            if (!gameActive || !e.touches || !e.touches[0]) return;
+            
+            e.preventDefault(); // Prevent scrolling
+            const rect = gameArea.getBoundingClientRect();
+            updateSpermPosition(
+                e.touches[0].clientX - rect.left,
+                e.touches[0].clientY - rect.top
+            );
+        }
+        
+        // Update sperm position
+        function updateSpermPosition(x, y) {
+            // Keep within bounds
+            const maxX = gameArea.clientWidth;
+            const maxY = gameArea.clientHeight;
+            
+            x = Math.max(0, Math.min(x, maxX));
+            y = Math.max(0, Math.min(y, maxY));
+            
+            spermPos.x = x;
+            spermPos.y = y;
+            
+            // Update visual position
+            spermElement.style.left = x + 'px';
+            spermElement.style.top = y + 'px';
+        }
         
         // Add a new virus
-        const addNewVirus = () => {
-            if (!gameAreaRef.current) return;
+        function addNewVirus() {
+            const gameWidth = gameArea.clientWidth;
+            const gameHeight = gameArea.clientHeight;
             
-            const gameWidth = gameAreaRef.current.clientWidth;
-            const gameHeight = gameAreaRef.current.clientHeight;
-            
-            // Create a new virus at a random position
-            // Try to place it away from the current sperm position
-            const spermPos = spermPosRef.current;
+            // Create a new virus at a random position away from sperm
             let x, y;
-            
-            // Keep trying until we get a position that's not too close to the sperm
             do {
                 x = Math.random() * (gameWidth - 40) + 20;
                 y = Math.random() * (gameHeight - 40) + 20;
@@ -439,34 +361,34 @@ Copy<main>
                 Math.sqrt(Math.pow(x - spermPos.x, 2) + Math.pow(y - spermPos.y, 2)) < 100
             );
             
+            const id = Date.now();
             const newVirus = {
-                id: Date.now(), // Unique ID
+                id: id,
+                element: createVirusElement(id),
                 pos: { x, y },
-                direction: { 
+                direction: {
                     dx: (Math.random() - 0.5) * 2,
                     dy: (Math.random() - 0.5) * 2
                 }
             };
             
-            // Update refs and state
-            virusesRef.current = [...virusesRef.current, newVirus];
-            setViruses(prev => [...prev, { id: newVirus.id, pos: newVirus.pos }]);
-        };
+            // Add to viruses array
+            viruses.push(newVirus);
+            
+            // Update virus count display
+            activeVirusesDisplay.textContent = viruses.length;
+        }
         
         // Move all viruses
-        const moveViruses = (deltaTime) => {
-            if (!gameAreaRef.current) return;
+        function moveViruses(deltaTime) {
+            const gameWidth = gameArea.clientWidth;
+            const gameHeight = gameArea.clientHeight;
             
-            const gameWidth = gameAreaRef.current.clientWidth;
-            const gameHeight = gameAreaRef.current.clientHeight;
-            
-            // Move each virus
-            const updatedViruses = virusesRef.current.map(virus => {
+            viruses.forEach(virus => {
                 const { pos, direction } = virus;
-                const { dx, dy } = direction;
                 
                 // Use current direction with occasional changes
-                const speed = baseSpeed * (1 + Math.random() * 0.2); // Add some variation
+                const speed = baseSpeed * (1 + Math.random() * 0.2);
                 
                 // Small chance to change direction
                 if (Math.random() < 0.01) {
@@ -475,17 +397,17 @@ Copy<main>
                 }
                 
                 // Calculate new position
-                let newX = pos.x + dx * speed * deltaTime;
-                let newY = pos.y + dy * speed * deltaTime;
+                let newX = pos.x + direction.dx * speed * deltaTime;
+                let newY = pos.y + direction.dy * speed * deltaTime;
                 
                 // Bounce off walls
                 if (newX < 20 || newX > gameWidth - 20) {
-                    direction.dx = -dx;
+                    direction.dx = -direction.dx;
                     newX = newX < 20 ? 20 : gameWidth - 20;
                 }
                 
                 if (newY < 20 || newY > gameHeight - 20) {
-                    direction.dy = -dy;
+                    direction.dy = -direction.dy;
                     newY = newY < 20 ? 20 : gameHeight - 20;
                 }
                 
@@ -493,204 +415,156 @@ Copy<main>
                 pos.x = newX;
                 pos.y = newY;
                 
-                return { ...virus };
+                // Update visual position
+                virus.element.style.left = newX + 'px';
+                virus.element.style.top = newY + 'px';
             });
-            
-            // Update ref and state
-            virusesRef.current = updatedViruses;
-            setViruses(updatedViruses.map(v => ({ id: v.id, pos: v.pos })));
-        };
+        }
         
-        // Collision detection between sperm and any virus
-        const checkCollision = () => {
-            const spermPos = spermPosRef.current;
+        // Check for collision between sperm and any virus
+        function checkCollision() {
             let collision = false;
-            let virusIdToRemove = null;
+            let virusToRemove = null;
             
-            // Check collision with any virus
-            for (const virus of virusesRef.current) {
-                const virusPos = virus.pos;
-                
-                // Calculate distance between centers
-                const dx = spermPos.x - virusPos.x;
-                const dy = spermPos.y - virusPos.y;
+            for (const virus of viruses) {
+                const dx = spermPos.x - virus.pos.x;
+                const dy = spermPos.y - virus.pos.y;
                 const distance = Math.sqrt(dx * dx + dy * dy);
                 
-                // Combined radius: sperm (6px) + virus (10px) = ~16px
-                const collisionThreshold = 16;
+                // Combined radius of sperm and virus
+                const collisionThreshold = 20;
                 
                 if (distance < collisionThreshold) {
                     collision = true;
-                    virusIdToRemove = virus.id;
+                    virusToRemove = virus;
                     break;
                 }
             }
             
-            // If collision detected, remove that virus and increment kill counter
-            if (collision && virusIdToRemove !== null) {
-                const updatedViruses = virusesRef.current.filter(v => v.id !== virusIdToRemove);
-                virusesRef.current = updatedViruses;
-                setViruses(prev => prev.filter(v => v.id !== virusIdToRemove));
-                setVirusesKilled(prev => prev + 1);
+            if (collision && virusToRemove) {
+                // Remove virus from the DOM
+                gameArea.removeChild(virusToRemove.element);
+                
+                // Remove from viruses array
+                viruses = viruses.filter(v => v.id !== virusToRemove.id);
+                
+                // Update counters
+                virusesKilled++;
+                virusesKilledDisplay.textContent = virusesKilled;
+                activeVirusesDisplay.textContent = viruses.length;
                 
                 // Check if all viruses are killed
-                if (updatedViruses.length === 0) {
-                    setGameActive(false);
+                if (viruses.length === 0) {
+                    endGame();
                     return;
                 }
                 
-                // Add a replacement virus after a short delay
+                // Add a replacement virus after delay
                 setTimeout(() => {
                     if (gameActive) {
                         addNewVirus();
                     }
                 }, 1000);
             }
-        };
+        }
         
-        // Reset the game to play again
-        const resetGame = () => {
-            if (!gameAreaRef.current) return;
+        // Game loop
+        function gameLoop(timestamp) {
+            if (!lastTimestamp) lastTimestamp = timestamp;
+            const deltaTime = timestamp - lastTimestamp;
+            lastTimestamp = timestamp;
             
-            const gameWidth = gameAreaRef.current.clientWidth;
-            const gameHeight = gameAreaRef.current.clientHeight;
+            if (!gameActive) return;
             
-            // Reset with a single virus
-            const initialVirus = {
-                id: Date.now(),
-                pos: {
-                    x: Math.random() < 0.5 ? 
-                        Math.random() * gameWidth * 0.3 : 
-                        gameWidth - (Math.random() * gameWidth * 0.3),
-                    y: Math.random() < 0.5 ? 
-                        Math.random() * gameHeight * 0.3 : 
-                        gameHeight - (Math.random() * gameHeight * 0.3)
-                },
-                direction: { 
-                    dx: (Math.random() - 0.5) * 2,
-                    dy: (Math.random() - 0.5) * 2
+            // Move viruses
+            moveViruses(deltaTime);
+            
+            // Check collision
+            checkCollision();
+            
+            // Update score
+            score++;
+            scoreDisplay.textContent = score;
+            
+            // Add new virus every 200 points
+            if (Math.floor(score / 200) > Math.floor((score - 1) / 200)) {
+                addNewVirus();
+                
+                // Increase speed every 200 points (up to a limit)
+                if (baseSpeed < 1.5) {
+                    baseSpeed += 0.1;
+                    speedLevelDisplay.textContent = Math.round((baseSpeed - 0.5) * 10) + 1;
                 }
-            };
+            }
             
-            virusesRef.current = [initialVirus];
-            setViruses([{
-                id: initialVirus.id,
-                pos: initialVirus.pos
-            }]);
+            // Continue game loop
+            animationFrameId = requestAnimationFrame(gameLoop);
+        }
+        
+        // Start game loop
+        function startGameLoop() {
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+            }
+            animationFrameId = requestAnimationFrame(gameLoop);
+        }
+        
+        // End game
+        function endGame() {
+            gameActive = false;
+            gameOverDisplay.style.display = 'block';
             
-            // Reset score, killed count, and speed
-            setScore(0);
-            setVirusesKilled(0);
-            setBaseSpeed(0.5);
-            setGameActive(true);
-        };
-
-        return (
-            <div className="p-2">
-                <div className="mb-4 text-center">
-                    <div className="flex justify-center gap-4">
-                        <p className="text-base">Score: {score}</p>
-                        <p className="text-base font-semibold" style={{color: "#d00"}}>Viruses Killed: {virusesKilled}</p>
-                    </div>
-                    <p className="text-xs mt-1">Speed Level: {Math.round((baseSpeed - 0.5) * 10) + 1}</p>
-                    
-                    {!gameActive && (
-                        <div className="mt-4">
-                            <p className="text-lg font-bold" style={{color: "#d00"}}>Game Over!</p>
-                            <p className="text-sm mb-2">You've killed all the viruses!</p>
-                            <button 
-                                onClick={resetGame} 
-                                className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg"
-                            >
-                                Play Again
-                            </button>
-                        </div>
-                    )}
-                </div>
-                
-                <div 
-                    ref={gameAreaRef}
-                    className="game-area"
-                >
-                    {/* Sperm */}
-                    <div
-                        className="absolute"
-                        style={{
-                            left: `${spermPos.x}px`,
-                            top: `${spermPos.y}px`,
-                            transform: 'translate(-50%, -50%)',
-                            zIndex: 10
-                        }}
-                    >
-                        <div className="relative">
-                            <div className="bg-blue-400 w-6 h-6 rounded-full"></div>
-                            <div 
-                                className="absolute bg-blue-400 w-2 h-8 rounded-full"
-                                style={{ left: '10px', top: '4px', transform: 'rotate(30deg)' }}
-                            ></div>
-                        </div>
-                    </div>
-                    
-                    {/* Viruses */}
-                    {viruses.map(virus => (
-                        <div
-                            key={virus.id}
-                            className="absolute"
-                            style={{
-                                left: `${virus.pos.x}px`,
-                                top: `${virus.pos.y}px`,
-                                transform: 'translate(-50%, -50%)',
-                                zIndex: 5
-                            }}
-                        >
-                            <div className="relative">
-                                <div className="bg-green-500 w-8 h-8 rounded-full flex items-center justify-center">
-                                    {/* Virus spikes */}
-                                    {[...Array(8)].map((_, i) => (
-                                        <div 
-                                            key={i}
-                                            className="absolute bg-green-500 w-2 h-4 rounded-full"
-                                            style={{ 
-                                                transform: `rotate(${i * 45}deg) translateY(-6px)`,
-                                                transformOrigin: 'center center',
-                                            }}
-                                        ></div>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-                    
-                    {/* Game instructions overlay */}
-                    <div className="absolute top-2 left-2 text-xs md:text-sm text-gray-600 bg-white bg-opacity-70 p-2 rounded">
-                        {isMobile ? 
-                            "Touch and drag to control the blue sperm. Catch the green viruses!" :
-                            "Move your cursor to control the blue sperm. Try to catch all the viruses!"}
-                    </div>
-                    
-                    {/* Virus count display */}
-                    <div className="absolute top-2 right-2 text-xs md:text-sm font-bold text-green-700 bg-white bg-opacity-70 p-2 rounded">
-                        Active Viruses: {viruses.length}
-                    </div>
-                </div>
-                
-                {/* Mobile-friendly notice */}
-                <div className="mt-4 text-xs md:text-sm text-gray-600 text-center max-w-xs mx-auto">
-                    {gameActive ? 
-                        "Tap and drag in the game area to catch viruses. Speed increases every 200 points!" :
-                        "You've won! Tap Play Again to restart the game."
-                    }
-                </div>
-            </div>
-        );
-    };
-    
-    // Wait for DOM to be ready
-    document.addEventListener('DOMContentLoaded', function() {
-        ReactDOM.render(
-            <CatchTheVirusGame />,
-            document.getElementById('game-container')
-        );
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+                animationFrameId = null;
+            }
+        }
+        
+        // Reset game
+        function resetGame() {
+            // Clear all viruses
+            viruses.forEach(virus => {
+                if (virus.element && virus.element.parentNode) {
+                    gameArea.removeChild(virus.element);
+                }
+            });
+            
+            // Reset game state
+            gameActive = true;
+            score = 0;
+            virusesKilled = 0;
+            baseSpeed = 0.5;
+            lastTimestamp = 0;
+            
+            // Reset display
+            scoreDisplay.textContent = score;
+            virusesKilledDisplay.textContent = virusesKilled;
+            speedLevelDisplay.textContent = 1;
+            gameOverDisplay.style.display = 'none';
+            
+            // Add initial virus
+            const gameWidth = gameArea.clientWidth;
+            const gameHeight = gameArea.clientHeight;
+            
+            const initialX = Math.random() * (gameWidth - 40) + 20;
+            const initialY = Math.random() * (gameHeight - 40) + 20;
+            
+            const id = Date.now();
+            viruses = [{
+                id: id,
+                element: createVirusElement(id),
+                pos: { x: initialX, y: initialY },
+                direction: { dx: 1, dy: 1 }
+            }];
+            
+            activeVirusesDisplay.textContent = 1;
+            
+            // Start game loop
+            startGameLoop();
+        }
+        
+        // Initialize game when DOM is loaded
+        init();
     });
 </script>
 </body>
