@@ -166,3 +166,29 @@ h1 {
 .button:hover span {
     transform: translateY(-4px);
 }
+.team-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 images per row */
+    gap: 20px;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+}
+
+.team-member img {
+    width: 150px; /* Adjust size as needed */
+   /* height: 150px;
+   /* border-radius: 50%; /* Makes images circular */*/
+    object-fit: cover;
+    transition: transform 0.3s ease-in-out;
+}
+
+.team-member img:hover {
+    transform: scale(1.1); /* Slight zoom effect on hover */
+}
+
+.team-member p {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
