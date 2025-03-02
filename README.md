@@ -22,25 +22,6 @@ This project is a fully functional website focused on **Nanotechnology and Vacci
 ```
 
 
-## 🎨 Styling and Animations
-- The website uses a consistent **color palette and typography**.
-- Smooth **hover effects and transitions** enhance user experience.
-- The **content page buttons** have **glowing effects and text styling**.
-
----
-
-## 📸 Adding Images
-- Store images in the `images/` folder.
-- Reference them in HTML like this:
-  ```html
-  <img src="images/example.jpg" alt="Example Image">
-  ```
-- **Recommended image sizes**:
-  - **Homepage Slideshow**: `1920x1080px`
-  - **Team Member Profile Pictures**: `200x200px`
-  - **Gallery Thumbnails**: `300x300px`
-
-
 ## 🛠️ Future Improvements
 - Integrate a Rust-based game using WebAssembly.
 - Improve animations and responsiveness for mobile users.
@@ -50,13 +31,13 @@ This project is a fully functional website focused on **Nanotechnology and Vacci
 
 ## 🤝 Contributors
 - **Kartik Pandey** (Project Lead)
-- Team Members: [Sriram S]
+- Team Members:
+- [Sriram S]
 - [Ritvik Rao]
 - [venkata Ramana Dumpala]
 - [Atul Ravi]
 - [B kailash]
 
-📧 Contact: [kartikpandey2024@gmail.com]
 
 ---
 
