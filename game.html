@@ -4,34 +4,93 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Game</title>
-    <link rel="stylesheet" href="style.css">
     <style>
-        /* Basic game styles - no external dependencies */
-        #game-container {
-            width: 100%;
-            max-width: 600px;
-            margin: 0 auto;
+        /* Base styles for the page */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
         }
-Copy    #game-area {
-        position: relative;
-        width: 100%;
-        height: 400px;
-        background-color: #f0f0f0;
-        border: 2px solid #ccc;
+Copy    header {
+        background-color: #008672;
+        color: white;
+        padding: 20px 0;
+        text-align: center;
+    }
+    
+    h1 {
+        margin: 0;
+        font-size: 2.5rem;
+    }
+    
+    nav {
+        display: flex;
+        justify-content: center;
+        margin-top: 10px;
+    }
+    
+    nav ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+    }
+    
+    nav li {
+        margin: 0 15px;
+    }
+    
+    nav a {
+        color: white;
+        text-decoration: none;
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
+    
+    main {
+        padding: 20px;
+    }
+    
+    section {
+        background-color: white;
         border-radius: 8px;
-        overflow: hidden;
-        touch-action: none;
+        padding: 20px;
+        max-width: 800px;
+        margin: 0 auto;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    h2 {
+        color: #333;
+        margin-top: 0;
+    }
+    
+    footer {
+        background-color: #008672;
+        color: white;
+        text-align: center;
+        padding: 15px 0;
+        position: relative;
+        margin-top: 20px;
+    }
+    
+    /* Game-specific styles */
+    #game-container {
+        width: 100%;
+        max-width: 600px;
+        margin: 20px auto;
     }
     
     .score-display {
         text-align: center;
-        margin-bottom: 1rem;
+        margin-bottom: 15px;
     }
     
     .score-row {
         display: flex;
         justify-content: center;
-        gap: 2rem;
+        gap: 40px;
     }
     
     .killed-counter {
@@ -41,99 +100,24 @@ Copy    #game-area {
     
     .speed-indicator {
         font-size: 0.8em;
-        margin-top: 0.25rem;
+        margin-top: 5px;
     }
     
-    .virus {
-        position: absolute;
-        width: 40px;
-        height: 40px;
-        margin-left: -20px;
-        margin-top: -20px;
-        z-index: 5;
-    }
-    
-    .virus-body {
-        width: 30px;
-        height: 30px;
-        background-color: #10b981;
-        border-radius: 50%;
+    #game-area {
         position: relative;
-        margin: 5px;
+        width: 100%;
+        height: 400px;
+        background-color: white;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        overflow: hidden;
+        touch-action: none;
     }
     
-    .virus-spike {
-        position: absolute;
-        width: 8px;
-        height: 15px;
-        background-color: #10b981;
-        border-radius: 4px;
-        top: 50%;
-        left: 50%;
-        margin-left: -4px;
-        margin-top: -22px;
-        transform-origin: center 15px;
-    }
-    
-    .sperm {
-        position: absolute;
-        width: 40px;
-        height: 40px;
-        margin-left: -20px;
-        margin-top: -20px;
-        z-index: 10;
-    }
-    
-    .sperm-head {
-        width: 24px;
-        height: 24px;
-        background-color: #60a5fa;
-        border-radius: 50%;
-        position: absolute;
-        top: 8px;
-        left: 8px;
-    }
-    
-    .sperm-tail {
-        width: 8px;
-        height: 30px;
-        background-color: #60a5fa;
-        border-radius: 4px;
-        position: absolute;
-        top: 10px;
-        left: 18px;
-        transform: rotate(30deg);
-    }
-    
-    .instruction {
-        position: absolute;
-        top: 8px;
-        left: 8px;
-        font-size: 0.8em;
-        color: #4b5563;
-        background-color: rgba(255, 255, 255, 0.7);
-        padding: 4px 8px;
-        border-radius: 4px;
-        z-index: 20;
-    }
-    
-    .virus-counter {
-        position: absolute;
-        top: 8px;
-        right: 8px;
-        font-size: 0.8em;
-        font-weight: bold;
-        color: #047857;
-        background-color: rgba(255, 255, 255, 0.7);
-        padding: 4px 8px;
-        border-radius: 4px;
-        z-index: 20;
-    }
-    
-    .game-over {
+    #game-over {
         display: none;
         text-align: center;
-        margin-top: 1rem;
+        margin-top: 15px;
     }
     
     .game-over-text {
@@ -143,32 +127,34 @@ Copy    #game-area {
     }
     
     .play-again {
-        margin-top: 0.5rem;
+        margin-top: 10px;
         padding: 8px 16px;
-        background-color: #3b82f6;
+        background-color: #008672;
         color: white;
         border: none;
-        border-radius: 8px;
+        border-radius: 4px;
         cursor: pointer;
+        font-size: 1em;
     }
     
     .play-again:hover {
-        background-color: #2563eb;
+        background-color: #006d5c;
     }
     
     .mobile-notice {
         text-align: center;
         font-size: 0.8em;
-        color: #4b5563;
-        margin-top: 1rem;
-        max-width: 320px;
-        margin-left: auto;
-        margin-right: auto;
+        color: #666;
+        margin-top: 15px;
     }
     
     @media (max-width: 600px) {
         #game-area {
             height: 60vh;
+        }
+        
+        nav a {
+            font-size: 1rem;
         }
     }
 </style>
@@ -198,22 +184,9 @@ Copy<main>
                 <div class="speed-indicator">Speed Level: <span id="speed-level">1</span></div>
             </div>
             
-            <div id="game-area">
-                <div id="sperm" class="sperm">
-                    <div class="sperm-head"></div>
-                    <div class="sperm-tail"></div>
-                </div>
-                
-                <div class="instruction">
-                    Move your cursor to control the blue sperm. Try to catch all the viruses!
-                </div>
-                
-                <div class="virus-counter">
-                    Active Viruses: <span id="active-viruses">1</span>
-                </div>
-            </div>
+            <div id="game-area"></div>
             
-            <div id="game-over" class="game-over">
+            <div id="game-over">
                 <div class="game-over-text">Game Over!</div>
                 <div>You've killed all the viruses!</div>
                 <button id="play-again" class="play-again">Play Again</button>
@@ -230,20 +203,83 @@ Copy<main>
     <p>&copy; 2025 Nanotech Vaccine Research</p>
 </footer>
 
-<!-- Vanilla JavaScript implementation - no dependencies -->
 <script>
     // Wait for DOM to be loaded
     document.addEventListener('DOMContentLoaded', function() {
         // Game elements
         const gameArea = document.getElementById('game-area');
-        const spermElement = document.getElementById('sperm');
         const scoreDisplay = document.getElementById('score');
         const virusesKilledDisplay = document.getElementById('viruses-killed');
         const speedLevelDisplay = document.getElementById('speed-level');
-        const activeVirusesDisplay = document.getElementById('active-viruses');
         const gameOverDisplay = document.getElementById('game-over');
         const playAgainButton = document.getElementById('play-again');
-        const instruction = document.querySelector('.instruction');
+        
+        // Create sperm element
+        const spermElement = document.createElement('div');
+        spermElement.style.position = 'absolute';
+        spermElement.style.width = '40px';
+        spermElement.style.height = '40px';
+        spermElement.style.marginLeft = '-20px';
+        spermElement.style.marginTop = '-20px';
+        spermElement.style.zIndex = '10';
+        
+        const spermHead = document.createElement('div');
+        spermHead.style.width = '24px';
+        spermHead.style.height = '24px';
+        spermHead.style.backgroundColor = '#60a5fa';
+        spermHead.style.borderRadius = '50%';
+        spermHead.style.position = 'absolute';
+        spermHead.style.top = '8px';
+        spermHead.style.left = '8px';
+        
+        const spermTail = document.createElement('div');
+        spermTail.style.width = '8px';
+        spermTail.style.height = '30px';
+        spermTail.style.backgroundColor = '#60a5fa';
+        spermTail.style.borderRadius = '4px';
+        spermTail.style.position = 'absolute';
+        spermTail.style.top = '10px';
+        spermTail.style.left = '18px';
+        spermTail.style.transform = 'rotate(30deg)';
+        
+        spermElement.appendChild(spermHead);
+        spermElement.appendChild(spermTail);
+        gameArea.appendChild(spermElement);
+        
+        // Create instruction element
+        const instruction = document.createElement('div');
+        instruction.style.position = 'absolute';
+        instruction.style.top = '8px';
+        instruction.style.left = '8px';
+        instruction.style.fontSize = '0.7em';
+        instruction.style.color = '#4b5563';
+        instruction.style.backgroundColor = 'rgba(255, 255, 255, 0.7)';
+        instruction.style.padding = '3px 6px';
+        instruction.style.borderRadius = '4px';
+        instruction.style.zIndex = '20';
+        instruction.style.opacity = '0.6';
+        gameArea.appendChild(instruction);
+        
+        // Create virus counter element
+        const virusCounter = document.createElement('div');
+        virusCounter.style.position = 'absolute';
+        virusCounter.style.top = '8px';
+        virusCounter.style.right = '8px';
+        virusCounter.style.fontSize = '0.7em';
+        virusCounter.style.fontWeight = 'bold';
+        virusCounter.style.color = '#047857';
+        virusCounter.style.backgroundColor = 'rgba(255, 255, 255, 0.7)';
+        virusCounter.style.padding = '3px 6px';
+        virusCounter.style.borderRadius = '4px';
+        virusCounter.style.zIndex = '20';
+        virusCounter.style.opacity = '0.6';
+        
+        const activeVirusesDisplay = document.createElement('span');
+        activeVirusesDisplay.textContent = '1';
+        
+        virusCounter.textContent = 'Active Viruses: ';
+        virusCounter.appendChild(activeVirusesDisplay);
+        gameArea.appendChild(virusCounter);
         
         // Game state
         let gameActive = true;
@@ -256,7 +292,9 @@ Copy<main>
         // Detect mobile
         const isMobile = window.matchMedia('(pointer: coarse)').matches;
         if (isMobile) {
-            instruction.textContent = "Touch and drag to control the blue sperm. Catch the green viruses!";
+            instruction.textContent = "Touch and drag to catch viruses";
+        } else {
+            instruction.textContent = "Move cursor to catch viruses";
         }
         
         // Sperm position
@@ -288,18 +326,39 @@ Copy<main>
         // Create virus element
         function createVirusElement(id) {
             const virus = document.createElement('div');
-            virus.className = 'virus';
             virus.id = 'virus-' + id;
+            virus.style.position = 'absolute';
+            virus.style.width = '40px';
+            virus.style.height = '40px';
+            virus.style.marginLeft = '-20px';
+            virus.style.marginTop = '-20px';
+            virus.style.zIndex = '5';
             
             const virusBody = document.createElement('div');
-            virusBody.className = 'virus-body';
+            virusBody.style.width = '30px';
+            virusBody.style.height = '30px';
+            virusBody.style.backgroundColor = '#10b981';
+            virusBody.style.borderRadius = '50%';
+            virusBody.style.position = 'relative';
+            virusBody.style.margin = '5px';
+            
             virus.appendChild(virusBody);
             
             // Create 8 spikes around the virus
             for (let i = 0; i < 8; i++) {
                 const spike = document.createElement('div');
-                spike.className = 'virus-spike';
+                spike.style.position = 'absolute';
+                spike.style.width = '8px';
+                spike.style.height = '15px';
+                spike.style.backgroundColor = '#10b981';
+                spike.style.borderRadius = '4px';
+                spike.style.top = '50%';
+                spike.style.left = '50%';
+                spike.style.marginLeft = '-4px';
+                spike.style.marginTop = '-22px';
+                spike.style.transformOrigin = 'center 15px';
                 spike.style.transform = `rotate(${i * 45}deg)`;
+                
                 virusBody.appendChild(spike);
             }
             
